@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gait Recorder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Gait Recorder</h1>
+    <span id="conn" class="chip bad">connecting…</span>
+    <span id="imu" class="chip">IMU: ?</span>
+  </header>
+
+  <main>
+    <section id="setup" class="card">
+      <label>Who is wearing it
+        <input id="subject" maxlength="20" autocomplete="off" autocapitalize="none" placeholder="e.g. kendrick">
+      </label>
+      <div class="field">Activity</div>
+      <div id="labels" class="labels">
+        <button type="button" data-label="still">Standing still</button>
+        <button type="button" data-label="walk">Walking</button>
+        <button type="button" data-label="run">Running</button>
+        <button type="button" data-label="bike">Biking / air-biking</button>
+      </div>
+      <label>Duration (seconds)
+        <input id="duration" type="number" inputmode="numeric" min="5" max="600" value="60">
+      </label>
+      <div class="quick">
+        <button type="button" data-seconds="30">30 s</button>
+        <button type="button" data-seconds="60">60 s</button>
+        <button type="button" data-seconds="120">120 s</button>
+      </div>
+      <label>Note (optional)
+        <input id="note" maxlength="40" autocomplete="off" placeholder="e.g. air-bike, fast, new strap">
+      </label>
+    </section>
+
+    <section id="control" class="card">
+      <div id="big" class="big">Ready</div>
+      <div id="sub" class="sub">Pick a person and an activity, then press START.</div>
+      <div class="bar"><div id="fill"></div></div>
+      <div class="row">
+        <button id="start" type="button" class="go">START</button>
+        <button id="stop" type="button" class="halt" disabled>STOP</button>
+      </div>
+    </section>
+
+    <section id="notice" class="notice" role="status" aria-live="polite"></section>
+
+    <section class="card">
+      <div class="field">Live signal (last 3 seconds)</div>
+      <canvas id="wave" height="120"></canvas>
+      <div class="legend"><span class="a">acceleration</span><span class="g">rotation</span></div>
+    </section>
+
+    <section class="card">
+      <div class="field">Recorded so far (seconds per person and activity, good files only)</div>
+      <table id="totals"><tbody></tbody></table>
+    </section>
+
+    <section class="card">
+      <div class="field">Files</div>
+      <ul id="files"></ul>
+      <button id="zip" type="button">Prepare zip of everything</button>
+      <a id="zipLink" href="#" download hidden>Download all_data.zip</a>
+    </section>
+  </main>
+
+  <script src="libs/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

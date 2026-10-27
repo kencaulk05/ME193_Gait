@@ -1,0 +1,6 @@
+name: Gait Recorder
+description: Records labelled IMU data (still, walk, run, bike) from the wearable. Open the web page on port 7000 from a phone or laptop, pick a person, an activity and a duration, press Start, and download the CSV files afterwards.
+ports: []
+bricks:
+- arduino:web_ui: {}
+icon: 🏃
