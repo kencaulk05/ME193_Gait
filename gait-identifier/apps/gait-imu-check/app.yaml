@@ -1,0 +1,5 @@
+name: Gait IMU Check
+description: First step of the gait identifier. Reads an MPU-6050 on the UNO Q at 100 Hz and checks, with a short guided test in the Python console, that the readings are alive and sensible (still, shake, rotate).
+ports: []
+bricks: []
+icon: 🚶

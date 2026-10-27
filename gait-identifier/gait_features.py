@@ -65,3 +65,23 @@ def features_b(w):
     f += [acc.mean(), acc.std(), acc.max(), gyro.mean(), gyro.std(), gyro.max()]
     f += list(rhythm(acc)) + list(rhythm(gyro))
     return [float(v) for v in f]
+
+
+# ---- plain-language names, for showing how a tree decided --------------------------------------------------------------
+_STAT_WORDS = {"mean": "average", "std": "spread of", "min": "lowest", "max": "highest", "maxabs": "largest size of"}
+
+
+def describe_feature(name):
+    """(a short phrase, a unit) for any feature name, e.g. 'ay_min' -> ('lowest ay', 'g'), 'gyro_std' -> ('spread of rotation speed', 'deg/s')."""
+    head, _, tail = name.partition("_")
+    if head in CHANNELS:
+        return "%s %s" % (_STAT_WORDS[tail], head), ("g" if head.startswith("a") else "deg/s")
+    if head in ("acc", "gyro"):
+        thing = "total acceleration" if head == "acc" else "rotation speed"
+        unit = "g" if head == "acc" else "deg/s"
+        if tail == "freq":
+            return "main rhythm of the %s" % thing, "Hz"
+        if tail == "rhythm":
+            return "how rhythmic the %s is" % thing, ""
+        return "%s %s" % (_STAT_WORDS[tail], thing), unit
+    raise ValueError("unknown feature name: " + name)

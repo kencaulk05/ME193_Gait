@@ -57,13 +57,27 @@ The two final trees: [Model A](results/tree_model_a.png) (three thresholds) and 
 * **The accelerometer is not calibrated.** Gravity reads 0.95 g standing and 1.09 g flat on a bench. This is a constant error, so it does not hurt a model trained on the same unit.
 * **Intensity differs between people.** Thresholds learned on one person's running can sit too high for another's.
 
+## The wearable and its apps
+
+Three apps run on the UNO Q (copy a folder from `apps/` into Arduino App Lab as an app). The training and evaluation above run on a laptop.
+
+| App | What it does |
+|---|---|
+| `apps/gait-imu-check` | Reads the IMU at 100 Hz and runs a short guided self-test (still, shake, rotate) to prove the sensor and wiring work |
+| `apps/gait-recorder` | A web page to record labelled data: pick a person and an activity, press START, download the CSV files |
+| `apps/gait-live` | **The live demo**: both models side by side on a web page and on the LED matrix, with a test mode that scores each model on whoever is wearing it |
+
+After retraining, run `python sync_live_app.py` to copy the new models into the live app.
+
 ## Run it
 
 ```
-pip install numpy scikit-learn matplotlib
+pip install -r requirements.txt
 python train_gait.py          # evaluates both models, writes results/ and models/gait_models.json
-python tests/test_gait.py     # about a minute
+python run_all_tests.py       # every test in the project; groups whose tools are missing are skipped, not failed
 ```
+
+`tests/test_gait.py` (the training tests) takes about a minute. The sketch tests need `g++` and the page tests need `node` plus `npm install jsdom`.
 
 ```python
 import numpy as np, gait_features as gf
@@ -84,5 +98,9 @@ print(models.predict(window))                # ('run', 'run')  = (Model A, Model
 | `models/gait_models.json` | The two trained trees |
 | `results/` | Figures, `summary.md`, `results.json` |
 | `tests/test_gait.py` | Windows, features, loader, no-leakage, held-out isolation, exported = scikit-learn, repeatability |
+| `apps/` | The three UNO Q apps, each with its own tests |
+| `sync_live_app.py` | Copies the shared code and trained models into the live app |
+| `run_all_tests.py` | Runs every test in the project |
+| `requirements.txt` | What the laptop side needs |
 
-Status: the training and evaluation are done. The live demo app (both models side by side, on the board's web page and LED matrix) is the next step.
+Status: training, evaluation and all three apps are built and tested on a computer against stand-ins for the board. The live app has not yet been run on the real board; its first run should check the LED letters, the page on a phone, and the log download.

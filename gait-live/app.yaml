@@ -1,0 +1,6 @@
+name: Gait Live
+description: Live gait identifier. Reads the ankle IMU, and every half second shows what Model A (one number) and Model B (all six outputs) think you are doing - still, walking, running or biking - on the web page (port 7000) and on the LED matrix. A test mode keeps score for each model.
+ports: []
+bricks:
+- arduino:web_ui: {}
+icon: 🚶

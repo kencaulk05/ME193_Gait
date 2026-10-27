@@ -54,12 +54,12 @@ expect("a perfectly still window has (practically) zero spread and does not cras
 print("4. loading recordings")
 tmp = Path(tempfile.mkdtemp())
 def fake_recording(name, n=1000):
-    with open(tmp / name, "w", newline="") as fh:
+    with open(tmp / name, "w", newline="", encoding="utf-8") as fh:
         wr = csv.writer(fh); wr.writerow(["n", "ax", "ay", "az", "gx", "gy", "gz"])
         for i in range(n): wr.writerow([i, i, 0, 0, 0, 0, 0])
 rows = [("a__walk__1.csv", "a", "walk", "2026-01-01 10:00:00", 0.0), ("a__walk__2.csv", "a", "walk", "2026-01-01 10:05:00", 0.0),
         ("a__run__1.csv", "a", "run", "2026-01-01 10:10:00", 7.5)]
-with open(tmp / "manifest.csv", "w", newline="") as fh:
+with open(tmp / "manifest.csv", "w", newline="", encoding="utf-8") as fh:
     wr = csv.writer(fh); wr.writerow(["file", "subject", "label", "note", "start", "seconds", "samples", "dropped", "lost_pct"])
     for name, who, lab, start, lost in rows:
         fake_recording(name); wr.writerow([name, who, lab, "", start, 10, 1000, 0, lost])
@@ -122,10 +122,10 @@ for out in (out1, out2):
     sys.argv = ["train_gait.py", "--results", str(out / "r"), "--models", str(out / "m"), "--no-figures"]
     import io, contextlib
     with contextlib.redirect_stdout(io.StringIO()): tg.main()
-expect("training twice gives identical results and models", (out1 / "r" / "results.json").read_text() == (out2 / "r" / "results.json").read_text() and (out1 / "m" / "gait_models.json").read_text() == (out2 / "m" / "gait_models.json").read_text())
-shipped = json.loads((ROOT / "results" / "results.json").read_text())
-expect("the results in the repo are the ones this code produces", shipped == json.loads((out1 / "r" / "results.json").read_text()))
-readme = (ROOT / "README.md").read_text() if (ROOT / "README.md").exists() else ""
+expect("training twice gives identical results and models", (out1 / "r" / "results.json").read_text(encoding="utf-8") == (out2 / "r" / "results.json").read_text(encoding="utf-8") and (out1 / "m" / "gait_models.json").read_text(encoding="utf-8") == (out2 / "m" / "gait_models.json").read_text(encoding="utf-8"))
+shipped = json.loads((ROOT / "results" / "results.json").read_text(encoding="utf-8"))
+expect("the results in the repo are the ones this code produces", shipped == json.loads((out1 / "r" / "results.json").read_text(encoding="utf-8")))
+readme = (ROOT / "README.md").read_text(encoding="utf-8") if (ROOT / "README.md").exists() else ""
 need = []
 for key in ("new_person", "new_recording"):
     for col in ("acc_a", "acc_a_fixed", "acc_b"):

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gait Live</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Gait Live</h1>
+    <span id="conn" class="chip bad">connecting…</span>
+    <span id="imu" class="chip">IMU: ?</span>
+  </header>
+
+  <main>
+    <section id="status" class="status" role="status" aria-live="polite">
+      <div id="statusText"></div>
+      <div class="bar" id="warmBar" hidden><div id="warmFill"></div></div>
+    </section>
+
+    <section class="models">
+      <article class="card model" id="cardA">
+        <h2>Model A <small>one number</small></h2>
+        <div id="labelA" class="label none">—</div>
+        <div id="rawA" class="raw"></div>
+        <div class="field" id="gaugeTitle">The one number it looks at</div>
+        <div class="gauge" id="gauge"></div>
+        <div class="gaugeValue" id="gaugeValue"></div>
+        <div class="field">How it decided</div>
+        <ol id="pathA" class="path"></ol>
+      </article>
+
+      <article class="card model" id="cardB">
+        <h2>Model B <small>all six outputs</small></h2>
+        <div id="labelB" class="label none">—</div>
+        <div id="rawB" class="raw"></div>
+        <div class="field">It looks at 34 numbers made from all six outputs, and asks</div>
+        <ol id="pathB" class="path"></ol>
+      </article>
+    </section>
+
+    <section id="agree" class="agree" aria-live="polite"></section>
+
+    <section class="card">
+      <div class="field">Last 60 seconds: what each model said, one block per half second</div>
+      <div class="histRow"><span class="histName">A</span><div class="hist" id="histA"></div></div>
+      <div class="histRow"><span class="histName">B</span><div class="hist" id="histB"></div></div>
+      <div class="legend">
+        <span class="swatch l0"></span>still <span class="swatch l1"></span>walk <span class="swatch l2"></span>run <span class="swatch l3"></span>bike
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="field">The sensor, last 3 seconds (dashed lines: Model A's thresholds on the shin axis)</div>
+      <canvas id="wave" height="130"></canvas>
+      <div class="legend"><span class="a">ax: acceleration along the shin</span><span class="g">rotation speed</span></div>
+    </section>
+
+    <section class="card" id="testCard">
+      <h2>Test mode</h2>
+      <label>Name of the person wearing it
+        <input id="person" maxlength="20" autocomplete="off" placeholder="e.g. Marie">
+      </label>
+      <div class="field">What are they really doing right now?</div>
+      <div id="truth" class="truth">
+        <button type="button" data-truth="still">Standing still</button>
+        <button type="button" data-truth="walk">Walking</button>
+        <button type="button" data-truth="run">Running</button>
+        <button type="button" data-truth="bike">Biking</button>
+        <button type="button" data-truth="" class="off">Not testing</button>
+      </div>
+      <div id="score" class="score"></div>
+      <table id="byLabel"><tbody></tbody></table>
+      <div id="disagree" class="disagree"></div>
+      <div class="row2">
+        <button id="reset" type="button">Clear scores</button>
+        <a id="logLink" href="data/live_log.csv" download>Download the log (every scored window)</a>
+      </div>
+      <label class="check"><input id="smooth" type="checkbox" checked> Smooth the big labels (majority of the last 1.5 s). The scores always use every raw window.</label>
+    </section>
+
+    <section id="notice" class="notice" role="status" aria-live="polite"></section>
+  </main>
+
+  <script src="libs/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

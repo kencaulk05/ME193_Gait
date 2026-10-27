@@ -33,7 +33,7 @@ COLORS = {"still": "#7a8699", "walk": "#1f6feb", "run": "#cf222e", "bike": "#1a7
 # ---- data ---------------------------------------------------------------------------------------------------------------
 def load_recordings(data_dir):
     """Read the manifest and every good recording. Returns (recordings, names of files that were skipped)."""
-    rows = list(csv.DictReader(open(Path(data_dir) / "manifest.csv", newline="")))
+    rows = list(csv.DictReader(open(Path(data_dir) / "manifest.csv", newline="", encoding="utf-8")))
     recs, skipped, seen = [], [], {}
     for r in sorted(rows, key=lambda r: r["start"]):
         if float(r["lost_pct"]) > MAX_LOST_PCT:
@@ -148,7 +148,7 @@ def export_models(final, out_path):
     data = {"fs": gf.FS, "window_samples": gf.WIN, "step_samples": gf.STEP, "labels": gf.LABELS,
             "model_a": {"feature": final["feature"], "axis": axis, "stat": stat, "tree": tree_to_dict(final["clf_a"])},
             "model_b": {"features": gf.FEATURE_NAMES_B, "tree": tree_to_dict(final["clf_b"])}}
-    Path(out_path).write_text(json.dumps(data, indent=1))
+    Path(out_path).write_text(json.dumps(data, indent=1), encoding="utf-8")
     return data
 
 
@@ -318,7 +318,7 @@ def write_summary(recs, skipped, W, y, person, protocols, final, out):
     imp = sorted(zip(gf.FEATURE_NAMES_B, final["clf_b"].feature_importances_), key=lambda p: -p[1])
     add("* **Model B** uses these numbers (share of the tree's decisions): %s.\n" % ", ".join("`%s` %.0f%%" % (n, 100 * v) for n, v in imp if v > 0.005))
     add("The final models were trained on everything, so they have no honest test score of their own: the tables above are the evidence.\n")
-    Path(out).write_text("\n".join(lines))
+    Path(out).write_text("\n".join(lines), encoding="utf-8")
 
 
 def main():
@@ -343,7 +343,7 @@ def main():
     export_models(final, Path(args.models) / "gait_models.json")
     write_summary(recs, skipped, W, y, person, protocols, final, Path(args.results) / "summary.md")
     serial = {k: [{kk: vv for kk, vv in r.items() if kk not in ("y_test", "pred_a", "pred_b", "pred_a_fixed")} for r in v] for k, v in protocols.items()}
-    (Path(args.results) / "results.json").write_text(json.dumps(serial, indent=1))
+    (Path(args.results) / "results.json").write_text(json.dumps(serial, indent=1), encoding="utf-8")
     if not args.no_figures:
         figures(recs, W, y, person, A, B, protocols, final, args.results)
     print("done: results in", args.results, "| models in", args.models)
