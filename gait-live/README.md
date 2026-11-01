@@ -48,6 +48,6 @@ A window is scored every half second, so 20 seconds is about 40 windows. Neighbo
 
 Tested on a normal computer, with a fake Arduino, a fake sensor and a simulated browser: on all 752 windows of the 16 recordings the live code gives exactly the same answers as the offline code; warming up, lost samples, a stream that stops and returns, smoothing, scoring, the log, every command from the page, the LED letters pixel by pixel, and the page itself.
 
-Tested on the real board:** the LED letters on the real matrix, the page on a phone, and the log download link. The sensor code, the 100 Hz stream, the page-to-board messages and the LED call from the loop use the same patterns that already ran in `gait-recorder`.
+**Tested on the real board:** the LED letters on the real matrix, the page on a phone, and the log download link. The sensor code, the 100 Hz stream, the page-to-board messages and the LED call from the loop use the same patterns that already ran in `gait-recorder`.
 
 Models were trained on two people. The live accuracy on a new person is exactly what test mode measures.
