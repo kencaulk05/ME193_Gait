@@ -103,4 +103,4 @@ print(models.predict(window))                # ('run', 'run')  = (Model A, Model
 | `run_all_tests.py` | Runs every test in the project |
 | `requirements.txt` | What the laptop side needs |
 
-Status: training, evaluation and all three apps are built and tested on a computer against stand-ins for the board. The live app has not yet been run on the real board; its first run should check the LED letters, the page on a phone, and the log download.
+Status: training, evaluation and all three apps are built and tested on a computer against stand-ins for the board (`python run_all_tests.py`), and the apps have run on the real board. The hardware, wiring and case are described in the [root README](../README.md).
