@@ -42,4 +42,4 @@ python sync_live_app.py       # after retraining: copies the new models into the
 
 ## Status
 
-Training, evaluation and all three apps are built and tested on a computer against stand-ins for the board. The live app has not yet been run on the real board.
+Training, evaluation and all three apps are built and tested on a computer against stand-ins for the board. The live app has been run on the real board.
